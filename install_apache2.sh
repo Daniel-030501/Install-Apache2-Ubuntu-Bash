@@ -7,19 +7,25 @@ function install_apache2() {
 }
 
 function check_apache2_status() {
-    sudo systemctl status apache2
+    if [ $(dpkg-query -W -f='${Status}' apache2 2>/dev/null | grep -c "ok installed") -eq 1 ];
+    then
+        echo "Apache2 installed on your system"
+    else
+        sudo systemctl status apache2
+    fi
 }
 
-while true; do
-    echo "Please choose an option:"
-    echo "1) Install Apache2"
-    echo "2) Check Apache2 status"
-    echo "3) Exit"
-    read -p "Enter your choice: " choice
-    case $choice in
-        1) install_apache2;;
-        2) check_apache2_status;;
-        3) exit;;
-        *) echo "Invalid option. Please choose again.";;
-    esac
-done
+    while true; do
+        echo "Please choose an option:"
+        echo "1) Install Apache2"
+        echo "2) Check Apache2 status"
+        echo "3) Exit"
+        read -p "Enter your choice: " choice
+        case $choice in
+            1) install_apache2;;
+            2) check_apache2_status;;
+            3) exit;;
+            *) echo "Invalid option. Please choose again.";;
+        esac
+    done
+fi
